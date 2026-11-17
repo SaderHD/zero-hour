@@ -3,7 +3,9 @@
 Read this before you change code. The design lives in `docs/`, and the work order lives in `docs/PLAN.md`.
 
 ## Workflow
-- Work on **one plan step at a time**, such as `PLAN 4.3`. When a step's "Done when" criteria pass, tick its checkbox in `docs/PLAN.md` in the same commit.
+- Work is organized into **sessions** (for example `Session M5-C`) in `docs/PLAN.md`. When asked to "do session X", implement only the steps under that session header, in order, then stop and summarize what was done and anything left for the next session.
+- Within a session, work **one step at a time**. When a step's "Done when" criteria pass, tick its checkbox in `docs/PLAN.md` in the same commit.
+- 🎯 focus sessions get no extra scope. 🖼️ art sessions need a screenshot committed to `docs/screens/`.
 - Commit message format: `[4.3] Hitscan firing against static world`.
 - If a step turns out to be too big, split it in `PLAN.md` (for example 4.3a and 4.3b) before you implement it.
 - If a decision changes the architecture, add or modify an ADR in `docs/DECISIONS.md`.

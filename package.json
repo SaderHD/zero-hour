@@ -11,11 +11,12 @@
   "scripts": {
     "build": "pnpm --recursive build",
     "format": "biome format --write .",
-    "lint": "biome check .",
+    "lint": "biome check . && node tools/check-imports.ts",
     "typecheck": "tsc -b"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.8",
+    "@types/node": "^24.19.2",
     "typescript": "5.9.3"
   }
 }

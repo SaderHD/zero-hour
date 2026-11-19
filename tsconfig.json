@@ -6,6 +6,7 @@
     { "path": "packages/art" },
     { "path": "packages/content" },
     { "path": "packages/maps" },
-    { "path": "packages/sim" }
+    { "path": "packages/sim" },
+    { "path": "tools" }
   ]
 }

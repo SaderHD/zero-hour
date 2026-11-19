@@ -11,6 +11,7 @@
   "scripts": {
     "build": "pnpm --recursive build",
     "dev": "pnpm --filter @zero-hour/client dev",
+    "dev:server": "pnpm --filter @zero-hour/server dev",
     "format": "biome format --write .",
     "lint": "biome check . && node tools/check-imports.ts",
     "test": "vitest run",

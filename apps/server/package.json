@@ -10,11 +10,15 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
     "@zero-hour/content": "workspace:*",
     "@zero-hour/maps": "workspace:*",
     "@zero-hour/sim": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15"
   }
 }

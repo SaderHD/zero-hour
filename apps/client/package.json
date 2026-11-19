@@ -10,12 +10,16 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json && vite build",
+    "dev": "vite"
   },
   "dependencies": {
     "@zero-hour/art": "workspace:*",
     "@zero-hour/content": "workspace:*",
     "@zero-hour/maps": "workspace:*",
     "@zero-hour/sim": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "8.3.8"
   }
 }

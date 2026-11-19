@@ -35,6 +35,10 @@ importers:
       '@zero-hour/sim':
         specifier: workspace:*
         version: link:../../packages/sim
+    devDependencies:
+      vite:
+        specifier: 8.3.8
+        version: 8.3.8(@types/node@24.19.2)
 
   apps/server:
     dependencies:

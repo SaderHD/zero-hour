@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "pnpm --recursive build",
+    "dev": "pnpm --filter @zero-hour/client dev",
     "format": "biome format --write .",
     "lint": "biome check . && node tools/check-imports.ts",
     "test": "vitest run",

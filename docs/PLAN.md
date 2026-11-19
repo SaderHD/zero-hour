@@ -58,7 +58,7 @@
 - [x] **0.2 TypeScript config.** Add a base `tsconfig` (strict, ES2022, bundler resolution) plus project references that enforce the dependency direction from ARCHITECTURE §2. *Done when:* `pnpm typecheck` passes, and importing `apps/client` from `sim` fails to compile.
 - [x] **0.3 Biome lint and format.** Add the config and the `pnpm lint` / `pnpm format` scripts. *Done when:* lint runs clean across the repo.
 - [x] **0.4 Import guard script.** Write `tools/check-imports.ts`, which fails if `packages/sim` imports DOM globals, `three/examples` renderers, `preact` or audio. *Done when:* a deliberately bad import fails the check and lint calls it.
-- [ ] **0.5 Vitest.** Add the workspace Vitest config and one sample test in `content`. *Done when:* `pnpm test` runs and passes.
+- [x] **0.5 Vitest.** Add the workspace Vitest config and one sample test in `content`. *Done when:* `pnpm test` runs and passes.
 - [ ] **0.6 Vite client app.** Create an empty page with a full-window canvas and HMR working. *Done when:* `pnpm dev` serves a black canvas that resizes correctly.
 - [ ] **0.7 Server app stub.** A Node 24 + `tsx` watch script that starts an HTTP server on 7777 with a `/health` route. *Done when:* `pnpm dev:server` and `curl /health` return `ok`.
 - [ ] **0.8 CI workflow.** A GitHub Actions workflow running install, lint, typecheck and test on every push and PR. *Done when:* it shows green on the branch.

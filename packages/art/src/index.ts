@@ -1,1 +1,1 @@
-export const artPackage = "@zero-hour/art";
+export const artPackage = '@zero-hour/art';

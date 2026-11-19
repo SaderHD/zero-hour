@@ -5,8 +5,5 @@
     "outDir": "dist"
   },
   "include": ["src"],
-  "references": [
-    { "path": "../content" },
-    { "path": "../maps" }
-  ]
+  "references": [{ "path": "../content" }, { "path": "../maps" }]
 }

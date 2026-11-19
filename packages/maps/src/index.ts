@@ -1,1 +1,1 @@
-export const mapsPackage = "@zero-hour/maps";
+export const mapsPackage = '@zero-hour/maps';

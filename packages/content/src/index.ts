@@ -1,1 +1,1 @@
-export const contentPackage = "@zero-hour/content";
+export const contentPackage = '@zero-hour/content';

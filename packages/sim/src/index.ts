@@ -1,1 +1,1 @@
-export const simPackage = "@zero-hour/sim";
+export const simPackage = '@zero-hour/sim';

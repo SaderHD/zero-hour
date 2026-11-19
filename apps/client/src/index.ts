@@ -1,1 +1,1 @@
-export const clientPackage = "@zero-hour/client";
+export const clientPackage = '@zero-hour/client';

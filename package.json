@@ -10,9 +10,12 @@
   },
   "scripts": {
     "build": "pnpm --recursive build",
+    "format": "biome format --write .",
+    "lint": "biome check .",
     "typecheck": "tsc -b"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.6.8",
     "typescript": "5.9.3"
   }
 }

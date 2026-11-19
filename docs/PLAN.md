@@ -55,7 +55,7 @@
 #### Session M0-A — Repo, tooling & CI (0.1–0.9)
 
 - [x] **0.1 Monorepo skeleton.** Set up pnpm workspaces with `apps/client`, `apps/server`, `packages/{sim,content,maps,art}` and a root `package.json` with scripts. *Done when:* `pnpm install` works and each package has an `index.ts` that builds.
-- [ ] **0.2 TypeScript config.** Add a base `tsconfig` (strict, ES2022, bundler resolution) plus project references that enforce the dependency direction from ARCHITECTURE §2. *Done when:* `pnpm typecheck` passes, and importing `apps/client` from `sim` fails to compile.
+- [x] **0.2 TypeScript config.** Add a base `tsconfig` (strict, ES2022, bundler resolution) plus project references that enforce the dependency direction from ARCHITECTURE §2. *Done when:* `pnpm typecheck` passes, and importing `apps/client` from `sim` fails to compile.
 - [ ] **0.3 Biome lint and format.** Add the config and the `pnpm lint` / `pnpm format` scripts. *Done when:* lint runs clean across the repo.
 - [ ] **0.4 Import guard script.** Write `tools/check-imports.ts`, which fails if `packages/sim` imports DOM globals, `three/examples` renderers, `preact` or audio. *Done when:* a deliberately bad import fails the check and lint calls it.
 - [ ] **0.5 Vitest.** Add the workspace Vitest config and one sample test in `content`. *Done when:* `pnpm test` runs and passes.

@@ -5,5 +5,11 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "references": [
+    { "path": "../../packages/art" },
+    { "path": "../../packages/content" },
+    { "path": "../../packages/maps" },
+    { "path": "../../packages/sim" }
+  ]
 }

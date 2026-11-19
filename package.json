@@ -9,7 +9,8 @@
     "pnpm": ">=10"
   },
   "scripts": {
-    "build": "pnpm --recursive build"
+    "build": "pnpm --recursive build",
+    "typecheck": "tsc -b"
   },
   "devDependencies": {
     "typescript": "5.9.3"

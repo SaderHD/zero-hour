@@ -5,6 +5,8 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
+    "noUncheckedSideEffectImports": true,
+    "composite": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

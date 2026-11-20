@@ -1,6 +1,6 @@
 import type { PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 import { describe, expect, it, vi } from 'vitest';
-import { Renderer, type RenderViewport } from './index';
+import { type PostProcessing, Renderer, type RenderViewport } from './index';
 
 function createViewport() {
   let resizeListener: (() => void) | undefined;
@@ -66,6 +66,19 @@ function createHarness() {
     render: vi.fn(),
     dispose: vi.fn(),
   };
+  const postProcessing = {
+    parameters: {
+      enabled: true,
+      bloom: true,
+      bloomIntensity: 1.2,
+      vignette: true,
+      noise: true,
+    },
+    update: vi.fn(),
+    render: vi.fn(),
+    setSize: vi.fn(),
+    dispose: vi.fn(),
+  };
   const renderer = new Renderer(
     {} as HTMLCanvasElement,
     scene,
@@ -73,34 +86,37 @@ function createHarness() {
     {
       viewport: view.viewport,
       webGLRenderer: webGLRenderer as unknown as WebGLRenderer,
+      postProcessing: postProcessing as unknown as PostProcessing,
     },
   );
 
-  return { view, scene, camera, webGLRenderer, renderer };
+  return { view, scene, camera, webGLRenderer, postProcessing, renderer };
 }
 
 describe('Renderer', () => {
   it('caps pixel ratio, resizes the camera and canvas, and cleans up', () => {
-    const { view, camera, webGLRenderer, renderer } = createHarness();
+    const { view, camera, webGLRenderer, postProcessing, renderer } =
+      createHarness();
 
     expect(webGLRenderer.setPixelRatio).toHaveBeenCalledWith(2);
-    expect(webGLRenderer.setSize).toHaveBeenCalledWith(800, 600, false);
+    expect(postProcessing.setSize).toHaveBeenCalledWith(800, 600);
     expect(camera.aspect).toBe(800 / 600);
     expect(view.hasResizeListener()).toBe(true);
 
     view.setSize(1024, 768);
     view.dispatchResize();
-    expect(webGLRenderer.setSize).toHaveBeenLastCalledWith(1024, 768, false);
+    expect(postProcessing.setSize).toHaveBeenLastCalledWith(1024, 768);
     expect(camera.aspect).toBe(1024 / 768);
     expect(camera.updateProjectionMatrix).toHaveBeenCalledTimes(2);
 
     renderer.dispose();
     expect(view.hasResizeListener()).toBe(false);
+    expect(postProcessing.dispose).toHaveBeenCalledOnce();
     expect(webGLRenderer.dispose).toHaveBeenCalledOnce();
   });
 
-  it('renders on every animation frame until stopped', () => {
-    const { view, scene, camera, webGLRenderer, renderer } = createHarness();
+  it('renders through post-processing on every animation frame until stopped', () => {
+    const { view, postProcessing, renderer } = createHarness();
     const update = vi.fn<(deltaSeconds: number) => void>();
 
     renderer.start(update);
@@ -111,14 +127,15 @@ describe('Renderer', () => {
     view.runFrame(1016);
     expect(update).toHaveBeenNthCalledWith(1, 0);
     expect(update.mock.calls[1][0]).toBeCloseTo(0.016);
-    expect(webGLRenderer.render).toHaveBeenCalledTimes(2);
-    expect(webGLRenderer.render).toHaveBeenLastCalledWith(scene, camera);
+    expect(postProcessing.render).toHaveBeenCalledTimes(2);
+    expect(postProcessing.render).toHaveBeenNthCalledWith(1, 0);
+    expect(postProcessing.render).toHaveBeenNthCalledWith(2, 0.016);
     expect(view.pendingFrameCount()).toBe(1);
 
     renderer.stop();
     expect(view.pendingFrameCount()).toBe(0);
     view.runFrame(1032);
-    expect(webGLRenderer.render).toHaveBeenCalledTimes(2);
+    expect(postProcessing.render).toHaveBeenCalledTimes(2);
 
     renderer.dispose();
   });

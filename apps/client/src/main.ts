@@ -1,6 +1,7 @@
 import GUI from 'lil-gui';
 import { FreeFlyCamera } from './freeFlyCamera';
 import { addLightingControls, createLightingRig } from './lightingRig';
+import { addPostProcessingControls } from './postProcessing';
 import { createPrimitiveDebugScene } from './primitiveDebugScene';
 import { Renderer } from './renderer';
 import './style.css';
@@ -22,6 +23,7 @@ const freeFlyCamera = new FreeFlyCamera(debugScene.camera, canvas, {
   instructions,
 });
 const renderer = new Renderer(canvas, debugScene.scene, debugScene.camera);
+addPostProcessingControls(gui, renderer.postProcessing);
 renderer.start((deltaSeconds) => {
   debugScene.update(deltaSeconds);
   freeFlyCamera.update(deltaSeconds);

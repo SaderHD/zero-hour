@@ -1,10 +1,12 @@
 import {
+  Color,
   MeshLambertMaterial,
   ShaderLib,
   type WebGLProgramParametersWithUniforms,
   type WebGLRenderer,
 } from 'three';
 import { describe, expect, it } from 'vitest';
+import { color } from '../palette';
 import { emissiveMaterial, flatMaterial } from './materials';
 
 describe('shared materials', () => {
@@ -17,6 +19,16 @@ describe('shared materials', () => {
     expect(flatMaterial.emissive.getHex()).toBe(0);
     expect(emissiveMaterial.emissive.getHex()).toBe(0xffffff);
     expect(emissiveMaterial.emissiveIntensity).toBeGreaterThan(1);
+  });
+
+  it('makes the ember emissive cross the HDR bloom threshold', () => {
+    const radiance = new Color(color('ember')).multiplyScalar(
+      emissiveMaterial.emissiveIntensity,
+    );
+    const luminance =
+      radiance.r * 0.2126 + radiance.g * 0.7152 + radiance.b * 0.0722;
+
+    expect(luminance).toBeGreaterThan(1);
   });
 
   it('masks emissive radiance per vertex and tints it with vertex color', () => {

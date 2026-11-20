@@ -7,5 +7,13 @@ export type {
   LightingRig,
 } from './lightingRig';
 export { addLightingControls, createLightingRig } from './lightingRig';
+export type {
+  PostProcessing,
+  PostProcessingParameters,
+} from './postProcessing';
+export {
+  addPostProcessingControls,
+  createPostProcessing,
+} from './postProcessing';
 export type { RendererOptions, RenderViewport } from './renderer';
 export { Renderer } from './renderer';

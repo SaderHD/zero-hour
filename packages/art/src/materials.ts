@@ -8,7 +8,7 @@ flatMaterial.name = 'flat-lambert';
 
 export const emissiveMaterial = new MeshLambertMaterial({
   emissive: 0xffffff,
-  emissiveIntensity: 2,
+  emissiveIntensity: 4,
   flatShading: true,
   vertexColors: true,
 });

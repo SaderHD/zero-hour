@@ -1,4 +1,5 @@
 import { type PerspectiveCamera, type Scene, WebGLRenderer } from 'three';
+import { createPostProcessing, type PostProcessing } from './postProcessing';
 
 export interface RenderViewport {
   innerWidth: number;
@@ -14,10 +15,12 @@ export interface RendererOptions {
   pixelRatioCap?: number;
   viewport?: RenderViewport;
   webGLRenderer?: WebGLRenderer;
+  postProcessing?: PostProcessing;
 }
 
 export class Renderer {
   readonly renderer: WebGLRenderer;
+  readonly postProcessing: PostProcessing;
 
   private readonly viewport: RenderViewport;
   private animationFrameId: number | undefined;
@@ -41,6 +44,9 @@ export class Renderer {
     this.renderer.setPixelRatio(
       Math.min(this.viewport.devicePixelRatio, options.pixelRatioCap ?? 2),
     );
+    this.postProcessing =
+      options.postProcessing ??
+      createPostProcessing(this.renderer, this.scene, this.camera);
     this.resize();
     this.viewport.addEventListener('resize', this.resize);
   }
@@ -61,7 +67,7 @@ export class Renderer {
         previousTime === undefined ? 0 : (time - previousTime) / 1000;
       previousTime = time;
       update(deltaSeconds);
-      this.renderer.render(this.scene, this.camera);
+      this.postProcessing.render(deltaSeconds);
 
       if (this.running) {
         this.animationFrameId = this.viewport.requestAnimationFrame(frame);
@@ -82,6 +88,7 @@ export class Renderer {
   dispose(): void {
     this.stop();
     this.viewport.removeEventListener('resize', this.resize);
+    this.postProcessing.dispose();
     this.renderer.dispose();
   }
 
@@ -89,6 +96,6 @@ export class Renderer {
     const { innerWidth: width, innerHeight: height } = this.viewport;
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(width, height, false);
+    this.postProcessing.setSize(width, height);
   };
 }

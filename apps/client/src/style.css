@@ -18,6 +18,21 @@ body {
   background: #000;
 }
 
+#perf-overlay {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  min-width: 132px;
+  margin: 0;
+  padding: 8px 10px;
+  background: rgb(0 0 0 / 75%);
+  color: #d6dfcf;
+  font: 12px / 1.5 monospace;
+  pointer-events: none;
+  user-select: none;
+}
+
 #fly-controls {
   position: fixed;
   bottom: 20px;

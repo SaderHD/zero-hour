@@ -79,7 +79,7 @@
 - [x] **1.6 Lighting rig and fog.** A hemisphere light plus a moon directional light and exponential fog, with parameters exposed in `lil-gui`. *Done when:* you can tune the scene mood live.
 - [x] **1.7 Free-fly debug camera.** WASD plus mouse look through Pointer Lock (client-only and temporary). *Done when:* you can fly around a test plane with scattered props.
 - [x] **1.8 Post-processing.** Wire `postprocessing` with bloom (threshold on emissives), vignette and noise. *Done when:* the effects toggle on and off and emissives bloom.
-- [ ] **1.9 Perf overlay.** FPS, frame ms, draw calls and triangles in a corner overlay. *Done when:* it's visible with `?debug=1`.
+- [x] **1.9 Perf overlay.** FPS, frame ms, draw calls and triangles in a corner overlay. *Done when:* it's visible with `?debug=1`.
 - [ ] **1.10 Test arena map (code-built).** A 40×40 m walled arena with a few boxes, a ramp and stairs, made from kit builders `wall`, `floorSlab`, `stairs`. *Done when:* you can fly through the arena and it looks on-style.
 
 ## M2 — Simulation core

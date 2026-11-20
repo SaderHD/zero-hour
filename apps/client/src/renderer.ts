@@ -40,6 +40,7 @@ export class Renderer {
         antialias: true,
         powerPreference: 'high-performance',
       });
+    this.renderer.info.autoReset = false;
 
     this.renderer.setPixelRatio(
       Math.min(this.viewport.devicePixelRatio, options.pixelRatioCap ?? 2),
@@ -67,6 +68,7 @@ export class Renderer {
         previousTime === undefined ? 0 : (time - previousTime) / 1000;
       previousTime = time;
       update(deltaSeconds);
+      this.renderer.info.reset();
       this.postProcessing.render(deltaSeconds);
 
       if (this.running) {

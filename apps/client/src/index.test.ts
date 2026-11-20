@@ -61,6 +61,11 @@ function createHarness() {
     updateProjectionMatrix: vi.fn(),
   };
   const webGLRenderer = {
+    info: {
+      autoReset: true,
+      reset: vi.fn(),
+      render: { frame: 0, calls: 0, triangles: 0, points: 0, lines: 0 },
+    },
     setPixelRatio: vi.fn(),
     setSize: vi.fn(),
     render: vi.fn(),
@@ -99,6 +104,7 @@ describe('Renderer', () => {
       createHarness();
 
     expect(webGLRenderer.setPixelRatio).toHaveBeenCalledWith(2);
+    expect(webGLRenderer.info.autoReset).toBe(false);
     expect(postProcessing.setSize).toHaveBeenCalledWith(800, 600);
     expect(camera.aspect).toBe(800 / 600);
     expect(view.hasResizeListener()).toBe(true);
@@ -116,7 +122,7 @@ describe('Renderer', () => {
   });
 
   it('renders through post-processing on every animation frame until stopped', () => {
-    const { view, postProcessing, renderer } = createHarness();
+    const { view, webGLRenderer, postProcessing, renderer } = createHarness();
     const update = vi.fn<(deltaSeconds: number) => void>();
 
     renderer.start(update);
@@ -130,6 +136,7 @@ describe('Renderer', () => {
     expect(postProcessing.render).toHaveBeenCalledTimes(2);
     expect(postProcessing.render).toHaveBeenNthCalledWith(1, 0);
     expect(postProcessing.render).toHaveBeenNthCalledWith(2, 0.016);
+    expect(webGLRenderer.info.reset).toHaveBeenCalledTimes(2);
     expect(view.pendingFrameCount()).toBe(1);
 
     renderer.stop();

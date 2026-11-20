@@ -7,6 +7,8 @@ export type {
   LightingRig,
 } from './lightingRig';
 export { addLightingControls, createLightingRig } from './lightingRig';
+export type { PerfOverlay } from './perfOverlay';
+export { createPerfOverlay } from './perfOverlay';
 export type {
   PostProcessing,
   PostProcessingParameters,

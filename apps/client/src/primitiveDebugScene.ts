@@ -1,4 +1,12 @@
-import { box, color, cone, cylinder, icosphere, wedge } from '@zero-hour/art';
+import {
+  box,
+  color,
+  cone,
+  cylinder,
+  icosphere,
+  testCrate,
+  wedge,
+} from '@zero-hour/art';
 import {
   Color,
   DirectionalLight,
@@ -68,6 +76,13 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
     scene.add(mesh);
     return mesh;
   });
+
+  const crate = new Mesh(testCrate(), material);
+  crate.name = 'testCrate';
+  crate.position.set(0, -2, 0);
+  crate.rotation.set(0.25, 0.55, 0);
+  scene.add(crate);
+  meshes.push(crate);
 
   return {
     scene,

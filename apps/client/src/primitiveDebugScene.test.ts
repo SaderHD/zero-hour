@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { createPrimitiveDebugScene } from './primitiveDebugScene';
 
 describe('primitive debug scene', () => {
-  it('shows every primitive with flat-shaded vertex colors', () => {
+  it('shows flat-shaded primitives and a single-mesh test crate', () => {
     const debugScene = createPrimitiveDebugScene();
     const meshes = debugScene.scene.children.filter(
       (child): child is Mesh => child instanceof Mesh,
@@ -15,6 +15,7 @@ describe('primitive debug scene', () => {
       'cylinder',
       'cone',
       'icosphere',
+      'testCrate',
     ]);
     expect(new Set(meshes.map((mesh) => mesh.material)).size).toBe(1);
     for (const mesh of meshes) {
@@ -25,6 +26,11 @@ describe('primitive debug scene', () => {
       expect(mesh.geometry.index).toBeNull();
       expect(mesh.geometry.hasAttribute('color')).toBe(true);
     }
+
+    const crate = meshes.find((mesh) => mesh.name === 'testCrate');
+    expect(crate).toBeDefined();
+    expect(crate?.geometry.groups).toHaveLength(0);
+    expect(Array.isArray(crate?.material)).toBe(false);
 
     const initialRotation = meshes[0].rotation.y;
     debugScene.update(1);

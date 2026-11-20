@@ -1,11 +1,15 @@
-import { describe, expect, it } from 'vitest';
-import { type CanvasViewport, mountCanvas } from './index';
+import type { PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { describe, expect, it, vi } from 'vitest';
+import { Renderer, type RenderViewport } from './index';
 
 function createViewport() {
   let resizeListener: (() => void) | undefined;
-  const viewport: CanvasViewport = {
+  let nextFrameId = 0;
+  const frameCallbacks = new Map<number, FrameRequestCallback>();
+  const viewport: RenderViewport = {
     innerWidth: 800,
     innerHeight: 600,
+    devicePixelRatio: 3,
     addEventListener: (_type, listener) => {
       resizeListener = listener;
     },
@@ -13,6 +17,14 @@ function createViewport() {
       if (resizeListener === listener) {
         resizeListener = undefined;
       }
+    },
+    requestAnimationFrame: (callback) => {
+      const id = ++nextFrameId;
+      frameCallbacks.set(id, callback);
+      return id;
+    },
+    cancelAnimationFrame: (id) => {
+      frameCallbacks.delete(id);
     },
   };
 
@@ -28,25 +40,86 @@ function createViewport() {
     hasResizeListener() {
       return resizeListener !== undefined;
     },
+    pendingFrameCount() {
+      return frameCallbacks.size;
+    },
+    runFrame(time: number) {
+      const callbacks = [...frameCallbacks.values()];
+      frameCallbacks.clear();
+      for (const callback of callbacks) {
+        callback(time);
+      }
+    },
   };
 }
 
-describe('mountCanvas', () => {
-  it('tracks viewport size and removes its resize listener on cleanup', () => {
-    const canvas = { width: 0, height: 0 } as HTMLCanvasElement;
-    const view = createViewport();
-    const unmount = mountCanvas(canvas, view.viewport);
+function createHarness() {
+  const view = createViewport();
+  const scene = {} as Scene;
+  const camera = {
+    aspect: 0,
+    updateProjectionMatrix: vi.fn(),
+  };
+  const webGLRenderer = {
+    setPixelRatio: vi.fn(),
+    setSize: vi.fn(),
+    render: vi.fn(),
+    dispose: vi.fn(),
+  };
+  const renderer = new Renderer(
+    {} as HTMLCanvasElement,
+    scene,
+    camera as unknown as PerspectiveCamera,
+    {
+      viewport: view.viewport,
+      webGLRenderer: webGLRenderer as unknown as WebGLRenderer,
+    },
+  );
 
-    expect(canvas.width).toBe(800);
-    expect(canvas.height).toBe(600);
+  return { view, scene, camera, webGLRenderer, renderer };
+}
+
+describe('Renderer', () => {
+  it('caps pixel ratio, resizes the camera and canvas, and cleans up', () => {
+    const { view, camera, webGLRenderer, renderer } = createHarness();
+
+    expect(webGLRenderer.setPixelRatio).toHaveBeenCalledWith(2);
+    expect(webGLRenderer.setSize).toHaveBeenCalledWith(800, 600, false);
+    expect(camera.aspect).toBe(800 / 600);
     expect(view.hasResizeListener()).toBe(true);
 
     view.setSize(1024, 768);
     view.dispatchResize();
-    expect(canvas.width).toBe(1024);
-    expect(canvas.height).toBe(768);
+    expect(webGLRenderer.setSize).toHaveBeenLastCalledWith(1024, 768, false);
+    expect(camera.aspect).toBe(1024 / 768);
+    expect(camera.updateProjectionMatrix).toHaveBeenCalledTimes(2);
 
-    unmount();
+    renderer.dispose();
     expect(view.hasResizeListener()).toBe(false);
+    expect(webGLRenderer.dispose).toHaveBeenCalledOnce();
+  });
+
+  it('renders on every animation frame until stopped', () => {
+    const { view, scene, camera, webGLRenderer, renderer } = createHarness();
+    const update = vi.fn<(deltaSeconds: number) => void>();
+
+    renderer.start(update);
+    renderer.start(update);
+    expect(view.pendingFrameCount()).toBe(1);
+
+    view.runFrame(1000);
+    view.runFrame(1016);
+    expect(update).toHaveBeenNthCalledWith(1, 0);
+    expect(update.mock.calls[1][0]).toBeCloseTo(0.016);
+    expect(webGLRenderer.render).toHaveBeenCalledTimes(2);
+    expect(webGLRenderer.render).toHaveBeenLastCalledWith(scene, camera);
+    expect(view.pendingFrameCount()).toBe(1);
+
+    renderer.stop();
+    expect(view.pendingFrameCount()).toBe(0);
+    view.runFrame(1032);
+    expect(webGLRenderer.render).toHaveBeenCalledTimes(2);
+
+    renderer.dispose();
   });
 });

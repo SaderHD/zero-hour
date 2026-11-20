@@ -68,7 +68,7 @@
 
 #### Session M1-A — Renderer, palette, primitives, materials (1.1–1.5)
 
-- [ ] **1.1 Renderer service.** `WebGLRenderer`, a resize handler, a pixel-ratio cap, and a render loop on `requestAnimationFrame`. *Done when:* a spinning cube renders at the display refresh rate.
+- [x] **1.1 Renderer service.** `WebGLRenderer`, a resize handler, a pixel-ratio cap, and a render loop on `requestAnimationFrame`. *Done when:* a spinning cube renders at the display refresh rate.
 - [ ] **1.2 Palette module.** `packages/art/palette.ts` with the named colors from ART_DIRECTION §3, plus `color(name)`. *Done when:* a test confirms every name resolves and there are no duplicates.
 - [ ] **1.3 Primitive builders.** `box`, `wedge`, `cylinder`, `cone`, `icosphere` producing non-indexed geometry with flat normals and vertex colors. *Done when:* a debug scene shows each primitive flat-shaded in palette colors.
 - [ ] **1.4 Builder operators.** `translate/rotate/scale`, `merge`, `mirrorX`, `colorize`, seeded `jitter`. *Done when:* a "test crate" made from merged boxes renders as a single draw call.

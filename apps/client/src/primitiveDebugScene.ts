@@ -10,14 +10,7 @@ import {
   testLamp,
   wedge,
 } from '@zero-hour/art';
-import {
-  Color,
-  DirectionalLight,
-  HemisphereLight,
-  Mesh,
-  PerspectiveCamera,
-  Scene,
-} from 'three';
+import { Color, Mesh, PerspectiveCamera, Scene } from 'three';
 
 export interface PrimitiveDebugScene {
   scene: Scene;
@@ -33,11 +26,6 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
   const camera = new PerspectiveCamera(50, 1, 0.1, 100);
   camera.position.set(0, 2.2, 8.5);
   camera.lookAt(0, 0, 0);
-
-  scene.add(new HemisphereLight(color('sky2'), color('concrete0'), 1.5));
-  const moonLight = new DirectionalLight(color('moon'), 2.5);
-  moonLight.position.set(-4, 7, 5);
-  scene.add(moonLight);
 
   const primitives = [
     {

@@ -61,7 +61,7 @@
 - [x] **0.5 Vitest.** Add the workspace Vitest config and one sample test in `content`. *Done when:* `pnpm test` runs and passes.
 - [x] **0.6 Vite client app.** Create an empty page with a full-window canvas and HMR working. *Done when:* `pnpm dev` serves a black canvas that resizes correctly.
 - [x] **0.7 Server app stub.** A Node 24 + `tsx` watch script that starts an HTTP server on 7777 with a `/health` route. *Done when:* `pnpm dev:server` and `curl /health` return `ok`.
-- [ ] **0.8 CI workflow.** A GitHub Actions workflow running install, lint, typecheck and test on every push and PR. *Done when:* it shows green on the branch.
+- [x] **0.8 CI workflow.** A GitHub Actions workflow running install, lint, typecheck and test on every push and PR. *Done when:* it shows green on the branch.
 - [ ] **0.9 Editor and docs hygiene.** Add `.editorconfig`, `.gitignore` and `.nvmrc`, and make sure the README's getting-started commands match the real scripts. *Done when:* a fresh clone works by following the README.
 
 ## M1 — Render sandbox

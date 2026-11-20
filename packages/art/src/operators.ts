@@ -95,6 +95,19 @@ export function mirrorX(geometry: BufferGeometry): BufferGeometry {
   return mirrored;
 }
 
+export function emissive(geometry: BufferGeometry, mask = 1): BufferGeometry {
+  const emissiveGeometry = copyAsNonIndexed(geometry);
+  const values = new Float32Array(
+    emissiveGeometry.getAttribute('position').count,
+  );
+  values.fill(mask);
+  emissiveGeometry.setAttribute(
+    'emissiveMask',
+    new Float32BufferAttribute(values, 1),
+  );
+  return emissiveGeometry;
+}
+
 export function colorize(
   geometry: BufferGeometry,
   paletteName: PaletteName | FaceColor,

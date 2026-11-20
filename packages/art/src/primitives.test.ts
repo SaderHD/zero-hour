@@ -30,11 +30,13 @@ describe('primitives', () => {
       const position = geometry.getAttribute('position');
       const normal = geometry.getAttribute('normal');
       const vertexColor = geometry.getAttribute('color');
+      const emissiveMask = geometry.getAttribute('emissiveMask');
 
       expect(geometry.index).toBeNull();
       expect(position.count).toBe(triangleCount * 3);
       expect(normal.count).toBe(position.count);
       expect(vertexColor.count).toBe(position.count);
+      expect(emissiveMask.count).toBe(position.count);
 
       const a = new Vector3();
       const b = new Vector3();
@@ -62,6 +64,7 @@ describe('primitives', () => {
         expect(vertexColor.getX(index)).toBeCloseTo(expectedColor.r, 6);
         expect(vertexColor.getY(index)).toBeCloseTo(expectedColor.g, 6);
         expect(vertexColor.getZ(index)).toBeCloseTo(expectedColor.b, 6);
+        expect(emissiveMask.getX(index)).toBe(0);
       }
 
       geometry.dispose();

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { color } from '../palette';
 import {
   colorize,
+  emissive,
   jitter,
   merge,
   mirrorX,
@@ -105,6 +106,20 @@ describe('geometry operators', () => {
     expect([...mirrored.getAttribute('color').array]).toEqual([
       ...source.getAttribute('color').array,
     ]);
+  });
+
+  it('marks a copy with an emissive mask without mutating the source', () => {
+    const source = box();
+    const masked = emissive(source, 0.75);
+    const sourceMask = source.getAttribute('emissiveMask');
+    const copiedMask = masked.getAttribute('emissiveMask');
+
+    expect(masked).not.toBe(source);
+    expect(copiedMask.count).toBe(sourceMask.count);
+    for (let index = 0; index < sourceMask.count; index += 1) {
+      expect(sourceMask.getX(index)).toBe(0);
+      expect(copiedMask.getX(index)).toBe(0.75);
+    }
   });
 
   it('colorizes the whole geometry or individual faces', () => {

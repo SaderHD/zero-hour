@@ -52,6 +52,10 @@ function finishGeometry(
     colors[offset + 2] = vertexColor.b;
   }
   geometry.setAttribute('color', new Float32BufferAttribute(colors, 3));
+  geometry.setAttribute(
+    'emissiveMask',
+    new Float32BufferAttribute(new Float32Array(position.count), 1),
+  );
 
   return geometry;
 }

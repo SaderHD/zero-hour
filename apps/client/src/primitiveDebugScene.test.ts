@@ -1,3 +1,4 @@
+import { emissiveMaterial, flatMaterial } from '@zero-hour/art';
 import { Mesh, MeshLambertMaterial } from 'three';
 import { describe, expect, it } from 'vitest';
 import { createPrimitiveDebugScene } from './primitiveDebugScene';
@@ -16,8 +17,11 @@ describe('primitive debug scene', () => {
       'cone',
       'icosphere',
       'testCrate',
+      'testLamp',
     ]);
-    expect(new Set(meshes.map((mesh) => mesh.material)).size).toBe(1);
+    expect(new Set(meshes.map((mesh) => mesh.material))).toEqual(
+      new Set([flatMaterial, emissiveMaterial]),
+    );
     for (const mesh of meshes) {
       expect(mesh.material).toBeInstanceOf(MeshLambertMaterial);
       const material = mesh.material as MeshLambertMaterial;
@@ -31,6 +35,16 @@ describe('primitive debug scene', () => {
     expect(crate).toBeDefined();
     expect(crate?.geometry.groups).toHaveLength(0);
     expect(Array.isArray(crate?.material)).toBe(false);
+
+    for (const mesh of meshes.slice(0, -1)) {
+      expect(mesh.material).toBe(flatMaterial);
+    }
+    const lamp = meshes.find((mesh) => mesh.name === 'testLamp');
+    expect(lamp?.material).toBe(emissiveMaterial);
+    expect(lamp?.geometry.groups).toHaveLength(0);
+    const lampMask = lamp?.geometry.getAttribute('emissiveMask');
+    expect(lampMask).toBeDefined();
+    expect(new Set(lampMask?.array)).toEqual(new Set([0, 1]));
 
     const initialRotation = meshes[0].rotation.y;
     debugScene.update(1);

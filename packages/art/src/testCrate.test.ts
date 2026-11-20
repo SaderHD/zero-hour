@@ -10,6 +10,7 @@ describe('test crate', () => {
     expect(geometry.getAttribute('position').count).toBe(15 * 12 * 3);
     expect(geometry.getAttribute('normal').count).toBe(15 * 12 * 3);
     expect(geometry.getAttribute('color').count).toBe(15 * 12 * 3);
+    expect(geometry.getAttribute('emissiveMask').count).toBe(15 * 12 * 3);
 
     const again = testCrate();
     expect([...geometry.getAttribute('position').array]).toEqual([

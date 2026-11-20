@@ -3,8 +3,11 @@ import {
   color,
   cone,
   cylinder,
+  emissiveMaterial,
+  flatMaterial,
   icosphere,
   testCrate,
+  testLamp,
   wedge,
 } from '@zero-hour/art';
 import {
@@ -12,7 +15,6 @@ import {
   DirectionalLight,
   HemisphereLight,
   Mesh,
-  MeshLambertMaterial,
   PerspectiveCamera,
   Scene,
 } from 'three';
@@ -37,10 +39,6 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
   moonLight.position.set(-4, 7, 5);
   scene.add(moonLight);
 
-  const material = new MeshLambertMaterial({
-    flatShading: true,
-    vertexColors: true,
-  });
   const primitives = [
     {
       name: 'box',
@@ -69,7 +67,7 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
     },
   ];
   const meshes = primitives.map(({ name, geometry }, index) => {
-    const mesh = new Mesh(geometry, material);
+    const mesh = new Mesh(geometry, flatMaterial);
     mesh.name = name;
     mesh.position.x = (index - 2) * 1.6;
     mesh.rotation.set(0.25, 0.55, 0);
@@ -77,12 +75,19 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
     return mesh;
   });
 
-  const crate = new Mesh(testCrate(), material);
+  const crate = new Mesh(testCrate(), flatMaterial);
   crate.name = 'testCrate';
   crate.position.set(0, -2, 0);
   crate.rotation.set(0.25, 0.55, 0);
   scene.add(crate);
   meshes.push(crate);
+
+  const lamp = new Mesh(testLamp(), emissiveMaterial);
+  lamp.name = 'testLamp';
+  lamp.position.set(4.8, 0, 0);
+  lamp.rotation.set(0.25, 0.55, 0);
+  scene.add(lamp);
+  meshes.push(lamp);
 
   return {
     scene,
@@ -96,7 +101,8 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
       for (const mesh of meshes) {
         mesh.geometry.dispose();
       }
-      material.dispose();
+      flatMaterial.dispose();
+      emissiveMaterial.dispose();
     },
   };
 }

@@ -4,13 +4,14 @@ import { describe, expect, it } from 'vitest';
 import { createPrimitiveDebugScene } from './primitiveDebugScene';
 
 describe('primitive debug scene', () => {
-  it('shows flat-shaded primitives and a single-mesh test crate', () => {
+  it('shows a test plane with scattered flat-shaded primitives and props', () => {
     const debugScene = createPrimitiveDebugScene();
     const meshes = debugScene.scene.children.filter(
       (child): child is Mesh => child instanceof Mesh,
     );
 
     expect(meshes.map((mesh) => mesh.name)).toEqual([
+      'testPlane',
       'box',
       'wedge',
       'cylinder',
@@ -46,9 +47,20 @@ describe('primitive debug scene', () => {
     expect(lampMask).toBeDefined();
     expect(new Set(lampMask?.array)).toEqual(new Set([0, 1]));
 
-    const initialRotation = meshes[0].rotation.y;
+    const box = meshes.find((mesh) => mesh.name === 'box');
+    const initialRotation = box?.rotation.y ?? 0;
     debugScene.update(1);
-    expect(meshes[0].rotation.y).toBeCloseTo(initialRotation + 0.45);
+    expect(box?.rotation.y).toBeCloseTo(initialRotation + 0.45);
+    expect(meshes[0].rotation.y).toBe(0);
+
+    const propPositions = meshes
+      .filter((mesh) => mesh.name !== 'testPlane')
+      .map((mesh) => mesh.position);
+    expect(
+      new Set(propPositions.map((position) => position.toArray().join(',')))
+        .size,
+    ).toBe(propPositions.length);
+    expect(propPositions.every((position) => position.y > 0)).toBe(true);
 
     debugScene.dispose();
   });

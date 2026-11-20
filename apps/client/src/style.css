@@ -17,3 +17,19 @@ body {
   height: 100%;
   background: #000;
 }
+
+#fly-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  max-width: calc(100% - 40px);
+  margin: 0;
+  padding: 10px 14px;
+  transform: translateX(-50%);
+  background: rgb(0 0 0 / 75%);
+  color: #d6dfcf;
+  font: 13px / 1.5 monospace;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+}

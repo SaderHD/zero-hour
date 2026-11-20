@@ -1,4 +1,5 @@
 import GUI from 'lil-gui';
+import { FreeFlyCamera } from './freeFlyCamera';
 import { addLightingControls, createLightingRig } from './lightingRig';
 import { createPrimitiveDebugScene } from './primitiveDebugScene';
 import { Renderer } from './renderer';
@@ -8,18 +9,29 @@ const canvas = document.querySelector<HTMLCanvasElement>('#game');
 if (canvas === null) {
   throw new Error('Missing #game canvas.');
 }
+const instructions = document.querySelector<HTMLElement>('#fly-controls');
+if (instructions === null) {
+  throw new Error('Missing #fly-controls instructions.');
+}
 
 const debugScene = createPrimitiveDebugScene();
 const lightingRig = createLightingRig(debugScene.scene);
 const gui = new GUI({ title: 'Scene mood' });
 addLightingControls(gui, lightingRig);
+const freeFlyCamera = new FreeFlyCamera(debugScene.camera, canvas, {
+  instructions,
+});
 const renderer = new Renderer(canvas, debugScene.scene, debugScene.camera);
-renderer.start(debugScene.update);
+renderer.start((deltaSeconds) => {
+  debugScene.update(deltaSeconds);
+  freeFlyCamera.update(deltaSeconds);
+});
 
 if (import.meta.hot) {
   import.meta.hot.accept();
   import.meta.hot.dispose(() => {
     renderer.dispose();
+    freeFlyCamera.dispose();
     gui.destroy();
     lightingRig.dispose();
     debugScene.dispose();

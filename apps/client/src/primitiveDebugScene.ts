@@ -23,9 +23,18 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
   const scene = new Scene();
   scene.background = new Color(color('sky0'));
 
-  const camera = new PerspectiveCamera(50, 1, 0.1, 100);
-  camera.position.set(0, 2.2, 8.5);
+  const camera = new PerspectiveCamera(50, 1, 0.1, 150);
+  camera.position.set(10, 7, 12);
   camera.lookAt(0, 0, 0);
+
+  const plane = new Mesh(
+    box({ width: 24, height: 0.2, depth: 24, color: 'concrete1' }),
+    flatMaterial,
+  );
+  plane.name = 'testPlane';
+  plane.position.y = -0.1;
+  scene.add(plane);
+  const meshes = [plane];
 
   const primitives = [
     {
@@ -54,26 +63,35 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
       geometry: icosphere({ radius: 0.8, lod: 1, color: 'frost' }),
     },
   ];
-  const meshes = primitives.map(({ name, geometry }, index) => {
+  const placements = [
+    [-4, 0.625, -2],
+    [-1.5, 0.625, -4],
+    [1.5, 0.75, -2],
+    [4, 0.75, -4],
+    [-4, 0.8, 2],
+  ] as const;
+  const animatedMeshes = primitives.map(({ name, geometry }, index) => {
     const mesh = new Mesh(geometry, flatMaterial);
     mesh.name = name;
-    mesh.position.x = (index - 2) * 1.6;
-    mesh.rotation.set(0.25, 0.55, 0);
+    const [x, y, z] = placements[index];
+    mesh.position.set(x, y, z);
+    mesh.rotation.y = index * 0.55;
     scene.add(mesh);
     return mesh;
   });
+  meshes.push(...animatedMeshes);
 
   const crate = new Mesh(testCrate(), flatMaterial);
   crate.name = 'testCrate';
-  crate.position.set(0, -2, 0);
-  crate.rotation.set(0.25, 0.55, 0);
+  crate.position.set(0, 0.8, 2);
+  crate.rotation.y = 0.55;
   scene.add(crate);
   meshes.push(crate);
+  animatedMeshes.push(crate);
 
   const lamp = new Mesh(testLamp(), emissiveMaterial);
   lamp.name = 'testLamp';
-  lamp.position.set(4.8, 0, 0);
-  lamp.rotation.set(0.25, 0.55, 0);
+  lamp.position.set(4, 1.28, 2);
   scene.add(lamp);
   meshes.push(lamp);
 
@@ -81,7 +99,7 @@ export function createPrimitiveDebugScene(): PrimitiveDebugScene {
     scene,
     camera,
     update(deltaSeconds) {
-      for (const mesh of meshes) {
+      for (const mesh of animatedMeshes) {
         mesh.rotation.y += deltaSeconds * 0.45;
       }
     },

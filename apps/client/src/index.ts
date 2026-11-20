@@ -1,5 +1,7 @@
 export const clientPackage = '@zero-hour/client';
 
+export type { FreeFlyCameraOptions } from './freeFlyCamera';
+export { FreeFlyCamera } from './freeFlyCamera';
 export type {
   LightingParameters,
   LightingRig,

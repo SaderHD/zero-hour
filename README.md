@@ -72,29 +72,38 @@ zero-hour/
 └─ docs/               # Design + engineering docs (start here)
 ```
 
-## Getting started (once Milestone 0 lands)
+## Getting started
+
+Requires Node 24 LTS and pnpm 10.34.9. If you use `nvm`, run `nvm use` to select the version in `.nvmrc`. If pnpm is not installed, run `npm install --global pnpm@10.34.9`.
+
+From a fresh checkout, install dependencies and run the checks:
 
 ```bash
 pnpm install
+pnpm lint
+pnpm typecheck
+pnpm test
 ```
+
+Start the client at http://localhost:5173:
 
 ```bash
-pnpm dev          # client at http://localhost:5173 (singleplayer works offline)
+pnpm dev
 ```
+
+To run the server stub in another terminal:
 
 ```bash
-pnpm dev:server   # multiplayer server at ws://localhost:7777
+pnpm dev:server   # HTTP server at http://localhost:7777
+curl http://localhost:7777/health   # ok
 ```
+
+Other available commands:
 
 ```bash
-pnpm test         # sim + content unit tests
+pnpm build        # build every package and the production client
+pnpm format       # format the repository with Biome
 ```
-
-```bash
-pnpm map:bake blackwater   # rebuild collision + navmesh for Map 01
-```
-
-Requires Node 24 LTS and pnpm 10 or newer.
 
 ## Controls (default)
 
